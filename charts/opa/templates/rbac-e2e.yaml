@@ -1,0 +1,27 @@
+{{- if .Values.e2e }}
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: {{ template "opa.fullname" . }}-e2e
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec"]
+    verbs: ["*"]
+  - apiGroups: ["apps"]
+    resources: ["deployments"]
+    verbs: ["*"]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: {{ template "opa.fullname" . }}-e2e
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: {{ template "opa.fullname" . }}-e2e
+subjects:
+  - kind: ServiceAccount
+    name: {{ template "opa.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace }}
+{{- end}}
+

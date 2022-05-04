@@ -1,0 +1,20 @@
+{{- if .Values.e2e }}
+{{- $nm := include "opa.fullname" . -}}
+{{- $image := printf "%s:%s" .Values.e2e.image.repository .Values.e2e.image.tag -}}
+apiVersion: v1
+kind: Pod
+metadata:
+  name: {{ $nm }}-e2e
+  annotations:
+    "helm.sh/hook": test
+    "helm.sh/hook-delete-policy": before-hook-creation
+spec:
+  restartPolicy: Never
+  serviceAccountName: {{ $nm }}
+  containers:
+    - name: e2e
+      image: {{ $image | quote }}
+      args:
+        - './test.sh'
+        - {{ printf "%v://%v:%v" (.Values.useHttps | ternary "https" "http") $nm .Values.port | quote }}
+{{- end }}

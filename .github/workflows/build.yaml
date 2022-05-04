@@ -31,13 +31,15 @@ jobs:
           version: "2021.1.1"
           install-go: false
           cache-key: "1.17.7"
-      - uses: extractions/setup-just@v1
+      - name: setup just
+        uses: extractions/setup-just@v1
       - run: just test
       - uses: rinx/setup-k3d@v0.0.4
         with:
           skipClusterCreation: true
       - run: |
           just k3d
-          just _up-e2e
-      - run: |
-          kubectl get all -A
+          just up
+      - name: e2e test
+        run: |
+          helm test kube-mgmt --logs

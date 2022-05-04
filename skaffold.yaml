@@ -10,6 +10,8 @@ build:
         buildArgs:
           VERSION: "{{.VERSION}}"
           COMMIT: "{{.COMMIT}}"
+    - image: test/e2e
+      context: ./test/e2e
   local:
     push: true
     useBuildkit: true
@@ -20,27 +22,13 @@ profiles:
     deploy:
       helm:
         releases:
-          - name: opa
+          - name: kube-mgmt
             chartPath: charts/opa
             wait: true
             upgradeOnChange: false
             skipBuildDependencies: true
             artifactOverrides:
               mgmt.image: openpolicyagent/kube-mgmt
-            imageStrategy:
-              helm: {}
-  - name: e2e
-    deploy:
-      helm:
-        releases:
-          - name: opa
-            chartPath: charts/opa
-            wait: true
-            upgradeOnChange: false
-            skipBuildDependencies: true
-            valuesFiles:
-              - test/e2e/values-e2e.yaml
-            artifactOverrides:
-              mgmt.image: openpolicyagent/kube-mgmt
+              e2e.image: test/e2e
             imageStrategy:
               helm: {}

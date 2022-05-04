@@ -37,8 +37,7 @@ serviceMonitor:
   additionalLabels: {}
 
 # Annotations in the deployment template
-annotations:
-  {}
+annotations: {}
 
 # Bootstrap policies to load upon startup
 # Define policies in the form of:
@@ -139,7 +138,7 @@ extraArgs: []
 extraEnv: []
 
 mgmt:
-  enabled: false
+  enabled: true
   image: 
     repository: openpolicyagent/kube-mgmt
     tag: null # appVersion is used by default, set to desired value to override
